@@ -49,7 +49,8 @@ async function main() {
   }
 
   const { docs: media } = await payload.find({ collection: 'media', limit: 0, depth: 0 })
-  const unused = media.filter((m) => !used.has(m.id))
+  // Payload types m.id as string|number; the postgres adapter uses numeric serial PKs.
+  const unused = media.filter((m) => !used.has(Number(m.id)))
   const bytes = unused.reduce((sum, m) => sum + (m.filesize ?? 0), 0)
 
   console.log(`Media: ${media.length} | referenced: ${used.size} | unused: ${unused.length} (${(bytes / 1024 / 1024).toFixed(1)}MB)\n`)

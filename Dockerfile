@@ -19,7 +19,9 @@ COPY . .
 # Payload config asserts a secret at build time; the real one is injected at
 # runtime by the deploy platform, so a throwaway value is fine here.
 ENV PAYLOAD_SECRET=build-time-placeholder
-RUN bun scripts/check-migrations.ts && bunx --bun next build
+RUN bun scripts/check-migrations.ts \
+  && bunx --bun payload generate:importmap \
+  && bunx --bun next build
 
 # ---- runner ----
 FROM base AS runner

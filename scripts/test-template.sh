@@ -52,7 +52,7 @@ npm install --no-audit --no-fund
 echo "→ payload generate:types"
 npm run payload -- generate:types
 
-echo "→ npm run build (runs check:migrations gate first)"
+echo "→ npm run build (check:migrations → generate:importmap → next build)"
 npm run build
 
 echo "→ npm run start (background)"
