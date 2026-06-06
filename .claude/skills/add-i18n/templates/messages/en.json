@@ -1,0 +1,15 @@
+{
+  "home": {
+    "title": "Payload Site Template",
+    "subtitle": "A Figma + Payload + Next.js starter. Replace this page with your first feature.",
+    "openAdmin": "Open admin"
+  },
+  "notFound": {
+    "pageNotFound": "Page Not Found",
+    "backHome": "Back to home"
+  },
+  "common": {
+    "readMore": "Read more",
+    "loading": "Loading"
+  }
+}

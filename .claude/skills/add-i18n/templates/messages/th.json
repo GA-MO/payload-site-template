@@ -1,0 +1,15 @@
+{
+  "home": {
+    "title": "Payload Site Template",
+    "subtitle": "Starter สำหรับ Figma + Payload + Next.js — เปลี่ยนหน้านี้เป็นฟีเจอร์แรกของคุณ",
+    "openAdmin": "เปิดหลังบ้าน"
+  },
+  "notFound": {
+    "pageNotFound": "ไม่พบหน้านี้",
+    "backHome": "กลับหน้าแรก"
+  },
+  "common": {
+    "readMore": "อ่านต่อ",
+    "loading": "กำลังโหลด"
+  }
+}
