@@ -20,6 +20,7 @@ COPY . .
 # runtime by the deploy platform, so a throwaway value is fine here.
 ENV PAYLOAD_SECRET=build-time-placeholder
 RUN bun scripts/check-migrations.ts \
+  && bunx --bun payload generate:types \
   && bunx --bun payload generate:importmap \
   && bunx --bun next build
 

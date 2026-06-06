@@ -52,12 +52,12 @@ Copy `templates/middleware.ts` → `src/middleware.ts` (as-is).
 
 ## 7. Restructure routes under `[locale]/`
 
-Move the `[...not-found]` directory under `[locale]/` (its `page.tsx` just calls `notFound()` and is locale-agnostic). Discard `page.tsx`, `not-found.tsx`, `layout.tsx` — they'll be rewritten from templates in the next step.
+Discard `page.tsx`, `not-found.tsx`, `layout.tsx`, and `[...not-found]/` — they'll be rewritten from templates in the next step. Don't move `[...not-found]` into `[locale]/` — it conflicts with the locale layout's async `params` access during prerender (next-intl middleware + `[locale]/not-found.tsx` already covers unmatched URLs; verified via runtime test).
 
 ```bash
 cd "src/app/(frontend)"
 mkdir -p '[locale]'
-mv '[...not-found]' '[locale]/'
+rm -rf '[...not-found]'
 rm page.tsx not-found.tsx layout.tsx
 ```
 
@@ -69,7 +69,7 @@ Then materialise three fresh files at the new paths (Write — paths don't exist
 
 ## 8. Edit `src/payload.config.ts`
 
-Add Payload translation imports near the existing imports (one per locale). For locales without a matching Payload language pack, omit the import and exclude from `admin.i18n.supportedLanguages` — but still include in `localization.locales` (content localization works without admin translations).
+Add Payload translation imports near the existing imports (one per locale). For locales without a matching Payload language pack, omit the import and exclude from `i18n.supportedLanguages` — but still include in `localization.locales` (content localization works without admin translations).
 
 ```ts
 import { en } from '@payloadcms/translations/languages/en'
@@ -77,23 +77,18 @@ import { th } from '@payloadcms/translations/languages/th'
 // add one line per locale that has a Payload language pack
 ```
 
-Inside the existing `admin: { … }`, after `theme: "light",`, add:
+`i18n` is a **top-level** option in `buildConfig` — NOT inside `admin`. Putting it under `admin` is invalid in Payload 3.85 and TS-fails the build. Inside `buildConfig({ … })`, after the `globals: []` line, add **both**:
 
 ```ts
 i18n: { supportedLanguages: { en, th } },
-```
-
-(List only the locales whose imports succeeded above.)
-
-Inside `buildConfig({ … })`, after the `globals: []` line, add:
-
-```ts
 localization: {
   locales: [/* user's LOCALES array literal */],
   defaultLocale: '/* DEFAULT_LOCALE */',
   fallback: true,
 },
 ```
+
+(List only the locales whose imports succeeded above in `supportedLanguages`.)
 
 ## 9. Edit `next.config.ts`
 
@@ -108,6 +103,12 @@ Change the default export from `export default withPayload(nextConfig)` to:
 
 ```ts
 export default withNextIntl(withPayload(nextConfig))
+```
+
+**Disable `cacheComponents`.** The `[locale]/layout.tsx` template `awaits params.locale` and sets `<html lang>` from it — `cacheComponents: true` flags that access as "uncached data outside Suspense" and aborts prerender (html/body can't sit inside Suspense). Locale routes are dynamic by design anyway, so this is the right tradeoff. Remove the line or change to `cacheComponents: false`:
+
+```ts
+// cacheComponents: true,  // ← remove; conflicts with locale-aware layout's async params
 ```
 
 ## 10. Replace `src/app/sitemap.ts`
