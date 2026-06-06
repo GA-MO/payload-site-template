@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+.env
+.env.*
+media
+storybook-static
+docs
+**/*.stories.tsx
+npm-debug.log*
+.DS_Store
