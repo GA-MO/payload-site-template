@@ -27,7 +27,7 @@ Normalise the locales: lowercase, trim, dedupe. Call this array `LOCALES`. The u
 
 ## 3. Update `package.json`
 
-Edit `dependencies` to add `"next-intl": "^3.26.5"` (or the latest stable from npmjs.com/package/next-intl — prefer caret range).
+Edit `dependencies` to add `"next-intl": "^4.13.0"`. The major version matters: next-intl 3 only peers Next ≤15, so it fails ERESOLVE against this template's Next 16. If npm reports a newer 4.x stable on npmjs.com/package/next-intl, prefer that — but stay on 4.x while the template is on Next 16.
 
 ## 4. Materialise i18n config files
 
