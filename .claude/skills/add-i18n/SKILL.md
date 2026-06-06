@@ -52,21 +52,20 @@ Copy `templates/middleware.ts` → `src/middleware.ts` (as-is).
 
 ## 7. Restructure routes under `[locale]/`
 
-Run via Bash from project root:
+Move the `[...not-found]` directory under `[locale]/` (its `page.tsx` just calls `notFound()` and is locale-agnostic). Discard `page.tsx`, `not-found.tsx`, `layout.tsx` — they'll be rewritten from templates in the next step.
 
 ```bash
 cd "src/app/(frontend)"
 mkdir -p '[locale]'
-mv page.tsx not-found.tsx '[...not-found]' '[locale]/'
-rm layout.tsx
+mv '[...not-found]' '[locale]/'
+rm page.tsx not-found.tsx layout.tsx
 ```
 
-Then materialise three replacement files (use Write — these are new at their new paths):
+Then materialise three fresh files at the new paths (Write — paths don't exist yet, so no Read is required):
 
 - `templates/layout.tsx` → `src/app/(frontend)/[locale]/layout.tsx` (as-is, no substitutions).
-- `templates/page.tsx` → `src/app/(frontend)/[locale]/page.tsx` (overwrites the moved placeholder).
-- `templates/not-found.tsx` → `src/app/(frontend)/[locale]/not-found.tsx` (overwrites).
-- The moved `[...not-found]/page.tsx` is fine as-is — it just calls `notFound()`.
+- `templates/page.tsx` → `src/app/(frontend)/[locale]/page.tsx`.
+- `templates/not-found.tsx` → `src/app/(frontend)/[locale]/not-found.tsx`.
 
 ## 8. Edit `src/payload.config.ts`
 
